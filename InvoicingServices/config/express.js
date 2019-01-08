@@ -48,7 +48,6 @@ module.exports = function () {
 
     app.use(function (req, res, next) {
         if (req.url !== '/api/login' && req.url !== '/api/user/register') {
-            console.log("req =", req.headers);
             var token = req.headers['authorization'];
             if (token) {
                 try {
@@ -57,8 +56,9 @@ module.exports = function () {
                         req.decoded = decoded;
                         var currenttime = new Date();
                         var exptime = new Date(decoded.exp);
-                        console.log("session =", req.session);
-                        if (req.session.loggedinuser) {
+                        if (currenttime < exptime) {
+                            req.session.username = decoded.username;
+                            req.session.loggedinuser = decoded.username;
                             next();
                         } else {
                             return res.status(403).send({

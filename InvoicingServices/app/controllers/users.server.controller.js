@@ -27,16 +27,15 @@ exports.authenticate = function (req, res, next) {
                                     result.password = null;
                                     var tokenObj = {};
                                     tokenObj.id = result._id;
+                                    tokenObj.username = result.username;
+                                    var d = new Date();
+                                    var calculatedExpiresIn = (((d.getTime()) + (60 * 60 * 1000)) - (d.getTime() - d.getMilliseconds()) / 1000);
                                     req.session.username = result.username;
                                     req.session.loggedinuser = result.email;
-                                    var token = jwt.sign(tokenObj, '' + config.tokenSecret);
+                                    console.log("calculatedExpiresIn =", calculatedExpiresIn);
+                                    var token = jwt.sign(tokenObj, '' + config.tokenSecret, { expiresIn: calculatedExpiresIn });
                                     console.log("token =", token);
-
-                                    req.session.save(function (err) {
-                                        console.log("session =", req.session);
-                                        res.send({ 'users': result._id, txtFullName: result.firstname, txtUsername: result.username, success: true, response_message: '', token: token, txtRoleName: result.txtRoleName });
-                                    });
-                                    
+                                    res.send({ 'users': result._id, txtFullName: result.firstname, txtUsername: result.username, success: true, response_message: '', token: token, txtRoleName: result.txtRoleName });                                   
                                     
                                 });
 
