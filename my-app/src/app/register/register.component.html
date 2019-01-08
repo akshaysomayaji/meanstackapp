@@ -1,0 +1,54 @@
+<div class="container login-container">
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 login-form-1">
+      <h3>Register Here</h3>
+      <form [formGroup]="registerForm" name="registerForm">
+        <div class="form-group" *ngIf="notificationShow">{{message}}</div>
+        <div class="form-group">
+          <input type="text" name="txtUserName" formControlName="txtUserName" class="form-control" placeholder="Your Username *" value="" [(ngModel)]="formData.username" />
+          <span *ngIf="submitted == true && registerForm.controls['txtUserName'].invalid && (registerForm.controls['txtUserName'].dirty || registerForm.controls['txtUserName'].touched)" class="bg-danger jasmine-result-message uk-pull-3-10">
+            User Name is invalid.
+          </span>
+        </div>
+        <div class="form-group">
+          <input type="email" name="txtEmaild" formControlName="txtEmaild" class="form-control" placeholder="Your Email *" value="" [(ngModel)]="formData.email" />
+          <span *ngIf="submitted == true && registerForm.controls['txtEmaild'].invalid && (registerForm.controls['txtEmaild'].dirty || registerForm.controls['txtEmaild'].touched)" class="bg-danger jasmine-result-message uk-pull-3-10">
+            Email is invalid.
+          </span>
+        </div>
+        <div class="form-group">
+          <input type="text" name="txtFirstname" formControlName="txtFirstname" class="form-control" placeholder="Your Email *" value="" [(ngModel)]="formData.firstname" />
+          <span *ngIf="submitted == true && registerForm.controls['txtFirstname'].invalid && (registerForm.controls['txtFirstname'].dirty || registerForm.controls['txtFirstname'].touched)" class="bg-danger jasmine-result-message uk-pull-3-10">
+            First name is invalid.
+          </span>
+        </div>
+        <div class="form-group">
+          <input type="text" name="txtLastname" formControlName="txtLastname" class="form-control" placeholder="Your Email *" value="" [(ngModel)]="formData.lastname" />
+          <span *ngIf="submitted == true && registerForm.controls['txtLastname'].invalid && (registerForm.controls['txtLastname'].dirty || registerForm.controls['txtLastname'].touched)" class="bg-danger jasmine-result-message uk-pull-3-10">
+            Last name is invalid.
+          </span>
+        </div>
+        <div class="form-group">
+          <input type="password" formControlName="txtPassword" name="txtPassword" class="form-control" placeholder="Your Password *" value="" [(ngModel)]="formData.password" />
+          <span *ngIf="submitted == true && registerForm.controls['txtPassword'].invalid && (registerForm.controls['txtPassword'].dirty || registerForm.controls['txtPassword'].touched)" class="bg-danger jasmine-result-message">
+            Password is invalid.
+          </span>
+        </div>
+        <div class="form-group">
+          <input type="password" formControlName="txtConfirmPassword" name="txtPassword" class="form-control" placeholder="Your Password *" value="" [(ngModel)]="formData.confirmpassword" />
+          <span *ngIf="submitted == true && registerForm.controls['txtConfirmPassword'].invalid && (registerForm.controls['txtConfirmPassword'].dirty || registerForm.controls['txtConfirmPassword'].touched)" class="bg-danger jasmine-result-message">
+            Confirm Password is invalid.
+          </span>
+        </div>
+        <div class="form-group">
+          <input type="submit" class="btnSubmit" value="Register" (click)="onRegister(formData)" />
+        </div>
+        <div class="form-group">
+          <a href="login" class="ForgetPwd pull-right">Forget Password?</a> <span></span>
+          <a href="login" class="ForgetPwd pull-left">Back to Login</a>
+        </div>
+      </form>
+    </div>    
+  </div>
+</div>

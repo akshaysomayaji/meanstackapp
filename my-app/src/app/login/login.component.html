@@ -1,0 +1,30 @@
+<div class="container login-container">
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 login-form-1">
+      <h3>Login Here</h3>
+      <form [formGroup]="loginForm" name="loginForm">
+        <div class="form-group" *ngIf="notificationShow">{{message}}</div>
+        <div class="form-group">
+          <input type="text" name="txtUserName" formControlName="txtUserName" class="form-control" placeholder="Your Email *" value="" [(ngModel)]="formData.username" />
+          <span *ngIf="submitted == true && loginForm.controls['txtUserName'].invalid && (loginForm.controls['txtUserName'].dirty || loginForm.controls['txtUserName'].touched)" class="bg-danger jasmine-result-message uk-pull-3-10">
+            User Name is invalid.
+          </span>
+        </div>
+        <div class="form-group">
+          <input type="password" formControlName="txtPassword" name="txtPassword" class="form-control" placeholder="Your Password *" value="" [(ngModel)]="formData.password" />
+          <span *ngIf="submitted == true && loginForm.controls['txtPassword'].invalid && (loginForm.controls['txtPassword'].dirty || loginForm.controls['txtPassword'].touched)" class="bg-danger jasmine-result-message">
+            Password is invalid.
+          </span>
+        </div>       
+        <div class="form-group">
+          <input type="submit" class="btnSubmit" value="Login" (click)="onLogin(formData)" />
+        </div>
+        <div class="form-group">
+          <a href="#" class="ForgetPwd pull-left">Forget Password?</a>
+          <a href="/register" class="ForgetPwd pull-right">Register Now!</a>
+        </div>
+      </form>
+    </div>    
+  </div>
+</div>
