@@ -14,7 +14,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 
-export class LoginService {
+export class RegisterService {
   private heroesUrl = environment.API_ENDPOINT;
 
   constructor(
@@ -22,9 +22,9 @@ export class LoginService {
   { }
 
 
-  addHero(login: RegisterModel): Observable<RegisterModel> {
-    return this.http.post<RegisterModel>(this.heroesUrl + "/login", login, httpOptions).pipe(
-      tap((loginresponse: RegisterResponseModel) => this.log(`logged in w/ id=${loginresponse.txtUsername}`)),
+  register(register: RegisterModel): Observable<RegisterResponseModel> {
+    return this.http.post<RegisterResponseModel>(this.heroesUrl + "/user/register", register, httpOptions).pipe(
+      tap((response: RegisterResponseModel) => this.log(`logged in w/ id=${response.response_message}`)),
       catchError(this.handleError<RegisterModel>('Register'))
     );
   }

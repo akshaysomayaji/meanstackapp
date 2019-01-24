@@ -16,18 +16,19 @@
 module.exports = function () {
     var app = express();
     app.use(cookieParser('SecretPassPhrase'));
+
     app.use(bodyParser.urlencoded({
         extended: true
     }));
     app.use(session({
         secret: "SecretPassPhrase",
         resave: false,
-        saveUninitialized: false,
+        saveUninitialized: true,
         store: new mongoStore({
             url: config.sessiondb,
             ttl: config.sessiontimeout
         }),
-        cookie: {secure: false }
+        cookie: {secure: true }
     }));
     app.use(bodyParser.json({ limit: '50mb' }));
     app.use(boolParser());
@@ -35,7 +36,7 @@ module.exports = function () {
     //app.use(xmlparser());
     var corsOptions = {
         origin: config.domain,
-        credentials: true,
+        credentials: false,
         optionsSuccessStatus: 200
     };
     app.use(cors(corsOptions));
@@ -48,7 +49,9 @@ module.exports = function () {
 
     app.use(function (req, res, next) {
         if (req.url !== '/api/login' && req.url !== '/api/user/register') {
+            console.log(req.url);
             var token = req.headers['authorization'];
+            //console.log('token = ',token);
             if (token) {
                 try {
                     var decoded = jwt.verify(token, '' + config.tokenSecret);
@@ -56,9 +59,14 @@ module.exports = function () {
                         req.decoded = decoded;
                         var currenttime = new Date();
                         var exptime = new Date(decoded.exp);
-                        if (currenttime < exptime) {
+                        console.log('currenttime =', currenttime.valueOf());
+                        console.log('exp =', exptime.valueOf());
+                     
+                        if (currenttime.valueOf() < exptime.valueOf()) {                            
                             req.session.username = decoded.username;
                             req.session.loggedinuser = decoded.username;
+                            req.session.userid = decoded.id;
+                            console.log(req.session);
                             next();
                         } else {
                             return res.status(403).send({

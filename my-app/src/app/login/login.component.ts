@@ -40,11 +40,11 @@ export class LoginComponent {
       .subscribe((responseData: LoginResponseModel) => {
         console.log(responseData);
         this.message = responseData.response_message;
-        this.notificationShow = !responseData.status;
+        this.notificationShow = !responseData.success;
         if (responseData.success) {
           sessionStorage.setItem("txtFullName", responseData.txtFullName);
           sessionStorage.setItem("accessToken", responseData.token);
-          this.router.navigate(['./heroes']);
+          this.router.navigate(['./users/index']);
         }
       });
   }

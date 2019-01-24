@@ -7,6 +7,11 @@ import { DefaultLayoutComponent } from './templates/layout/default-layout.compon
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'heroes',
+    pathMatch: 'full',
+  },
+  {
     path: 'login',
     component: LoginComponent,
     data: {
@@ -29,7 +34,12 @@ const routes: Routes = [
       {
         path: 'heroes',
         loadChildren: './heroes/heroes.module#HeroesModule'
-      },]
+      },
+      {
+        path: 'users',
+        loadChildren: './Users/users.module#UsersModule'
+      },
+    ]
   }
 ];
 

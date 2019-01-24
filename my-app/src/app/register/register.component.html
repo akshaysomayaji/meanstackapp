@@ -12,19 +12,19 @@
           </span>
         </div>
         <div class="form-group">
-          <input type="email" name="txtEmaild" formControlName="txtEmaild" class="form-control" placeholder="Your Email *" value="" [(ngModel)]="formData.email" />
-          <span *ngIf="submitted == true && registerForm.controls['txtEmaild'].invalid && (registerForm.controls['txtEmaild'].dirty || registerForm.controls['txtEmaild'].touched)" class="bg-danger jasmine-result-message uk-pull-3-10">
+          <input type="email" name="txtEmailId" formControlName="txtEmailId" class="form-control" placeholder="Your Email *" value="" [(ngModel)]="formData.email" />
+          <span *ngIf="submitted == true && registerForm.controls['txtEmailId'].invalid && (registerForm.controls['txtEmailId'].dirty || registerForm.controls['txtEmailId'].touched)" class="bg-danger jasmine-result-message uk-pull-3-10">
             Email is invalid.
           </span>
         </div>
         <div class="form-group">
-          <input type="text" name="txtFirstname" formControlName="txtFirstname" class="form-control" placeholder="Your Email *" value="" [(ngModel)]="formData.firstname" />
+          <input type="text" name="txtFirstname" formControlName="txtFirstname" class="form-control" placeholder="Your First Name *" value="" [(ngModel)]="formData.firstname" />
           <span *ngIf="submitted == true && registerForm.controls['txtFirstname'].invalid && (registerForm.controls['txtFirstname'].dirty || registerForm.controls['txtFirstname'].touched)" class="bg-danger jasmine-result-message uk-pull-3-10">
             First name is invalid.
           </span>
         </div>
         <div class="form-group">
-          <input type="text" name="txtLastname" formControlName="txtLastname" class="form-control" placeholder="Your Email *" value="" [(ngModel)]="formData.lastname" />
+          <input type="text" name="txtLastname" formControlName="txtLastname" class="form-control" placeholder="Your Last Name *" value="" [(ngModel)]="formData.lastname" />
           <span *ngIf="submitted == true && registerForm.controls['txtLastname'].invalid && (registerForm.controls['txtLastname'].dirty || registerForm.controls['txtLastname'].touched)" class="bg-danger jasmine-result-message uk-pull-3-10">
             Last name is invalid.
           </span>

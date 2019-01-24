@@ -1,0 +1,34 @@
+<div class="container-12">
+  <div ><button class="btn btn-info" (click)="newUser()"> New User </button></div>
+  <hr/>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>
+          User Name
+        </th>
+        <th>
+          Full Name
+        </th>
+        <th>
+          Email
+        </th>
+        <th>
+          Role
+        </th>
+        <th>
+          Edit
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let hero of users">
+        <td class="text-capitalize">{{hero.username}}</td>
+        <td class="text-capitalize">{{hero.firstname}}{{hero.lastname}}</td>
+        <td class="text-capitalize">{{hero.email}}</td>
+        <td><i class="text-capitalize">{{hero.userrole}}</i> </td>
+        <td><a class="btn btn-info btn-sm">Edit</a>&nbsp;<a class="btn btn-danger btn-sm">Delete</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

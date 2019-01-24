@@ -11,9 +11,7 @@ var config = require('../../config/config');
 exports.authenticate = function (req, res, next) {
     var email = req.body.username.toString();
     var password = req.body.password;
-    console.log(req.body);
     User.findOne({ email: email, isActive: true }, function (err, result) {
-        console.log(result);
         if (result) {
             UserPassword.findOne({ userid: result._id.toString(), isActive: true }, function (err, userpwd) {
                 if (userpwd) {
@@ -32,11 +30,9 @@ exports.authenticate = function (req, res, next) {
                                     var calculatedExpiresIn = (((d.getTime()) + (60 * 60 * 1000)) - (d.getTime() - d.getMilliseconds()) / 1000);
                                     req.session.username = result.username;
                                     req.session.loggedinuser = result.email;
-                                    console.log("calculatedExpiresIn =", calculatedExpiresIn);
+                                    console.log("expiry time =", new Date(calculatedExpiresIn));
                                     var token = jwt.sign(tokenObj, '' + config.tokenSecret, { expiresIn: calculatedExpiresIn });
-                                    console.log("token =", token);
-                                    res.send({ 'users': result._id, txtFullName: result.firstname, txtUsername: result.username, success: true, response_message: '', token: token, txtRoleName: result.txtRoleName });                                   
-                                    
+                                    res.send({ 'users': result._id, txtFullName: result.firstname, txtUsername: result.username, success: true, response_message: '', token: token, txtRoleName: result.txtRoleName });                                                                      
                                 });
 
                             });
@@ -103,7 +99,24 @@ function sendmails(body, req, callback) {
 }
 
 exports.validateSession = function (req, res, next) {
-    res.send({ success: true, text:"", });
+    try {
+        console.log("id =", req.session.userid);
+        User.findOne({ _id: mongoose.Types.ObjectId(req.session.userid), isActive: true }, function (err, result) {
+            if (err) {
+                res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User000'), err: err });
+            } else {
+                if (result) {
+                    res.send({ success: true, text: "", });
+                } else {
+                    res.send({ success: false, text: "Session expired. Please relogin." });
+                }
+            }
+        });
+    }
+    catch (err) {
+        res.send({ success: false, text: "Session expired. Please relogin.", });
+    }
+
 };
 
 exports.getuserdetails = function (req, res, next) {
@@ -157,8 +170,8 @@ exports.adduser = function (req, res, next) {
                 } else {
                     mail.sendmails_registration(req.body, req, function (result) {
                         if (result.mailSentError) {
-                            res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User015'), err: err });
-                        } else {
+                        //    res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User015'), err: err });
+                        //} else {
                             var userObj = new User(req.body);
                             userObj.save(function (err, userreponseObj) {
                                 if (err) {

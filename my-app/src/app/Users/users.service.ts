@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, of } from 'rxjs';
-import { commonResponseModel } from '../commonResponseModel';
 import { catchError, map, tap } from 'rxjs/operators';
+import { userFilterModel, UsersModel, userResponseModel } from './usersModel';
+
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -11,27 +12,37 @@ const httpOptions = {
     'Access-Control-Allow-Headers': '*',
     "Expires": "0",
     "Pragma": "no-cache",
-    "Cache-Control":"no-cache, no-store, must-revalidate"
-  })
+    "Cache-Control": "no-cache, no-store, must-revalidate"
+  }),
 };
-
 
 @Injectable({
   providedIn: 'root',
 })
 
-export class HeroesService {
+export class UsersService {
   private heroesUrl = environment.API_ENDPOINT;
 
-  constructor(
-    private http: HttpClient) { }
 
-  sessionCheck(): Observable<commonResponseModel> {
-    return this.http.get<commonResponseModel>(this.heroesUrl + "/user/sessionvalidation/" + sessionStorage.getItem("accessToken"), httpOptions).pipe(
-      tap((response: commonResponseModel) => this.log(`logged in w/ id=${response}`)),
-      catchError(this.handleError<commonResponseModel>('authenticate'))
+  constructor(
+    private http: HttpClient, private usersService: UsersService)
+  { }
+
+
+  getUsersDetails(filter: userFilterModel): Observable<userResponseModel> {
+    return this.http.get<userResponseModel>(this.heroesUrl + "/user/getall/" + filter.userrole, httpOptions).pipe(
+      tap((response: userResponseModel) => this.log(`logged in w/ id=${response}`)),
+      catchError(this.handleError<userResponseModel>('authenticate'))
+    );
+  } 
+
+  addUserDetails(register: UsersModel): Observable<userResponseModel> {
+    return this.http.post<userResponseModel>(this.heroesUrl + "/user/add", register, httpOptions).pipe(
+      tap((response: userResponseModel) => this.log(`logged in w/ id=${response}`)),
+      catchError(this.handleError<userResponseModel>('Register'))
     );
   }
+
   private log(message: string) {
     console.log(message);
   }
@@ -49,4 +60,5 @@ export class HeroesService {
       return of(result as T);
     };
   }
+
 }
