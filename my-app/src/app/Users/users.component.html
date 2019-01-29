@@ -1,9 +1,12 @@
 <div class="container-12">
-  <div ><button class="btn btn-info" (click)="newUser()"> New User </button></div>
-  <hr/>
+  <div><button class="btn btn-info" (click)="newUser()"> New User </button></div>
+  <hr />
   <table class="table table-bordered table-striped">
     <thead>
       <tr>
+        <th>
+          Sl.Num
+        </th>
         <th>
           User Name
         </th>
@@ -22,7 +25,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let hero of users">
+      <tr *ngFor="let hero of pagedItems">
+        <td>{{hero.index}}</td>
         <td class="text-capitalize">{{hero.username}}</td>
         <td class="text-capitalize">{{hero.firstname}}{{hero.lastname}}</td>
         <td class="text-capitalize">{{hero.email}}</td>
@@ -31,4 +35,23 @@
       </tr>
     </tbody>
   </table>
+
+  <!-- pager -->
+  <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+    <li [ngClass]="{disabled:pager.currentPage === 1}">
+      <a (click)="setPage(1)">First</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === 1}">
+      <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+    </li>
+    <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+      <a (click)="setPage(page)">{{page}}</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+      <a (click)="setPage(pager.currentPage + 1)">Next</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+      <a (click)="setPage(pager.totalPages)">Last</a>
+    </li>
+  </ul>
 </div>

@@ -4,6 +4,7 @@ import { commonResponseModel } from '../commonResponseModel';
 import { Router } from '@angular/router';
 import { userFilterModel, userResponseModel, UsersModel } from './usersModel';
 import { UsersService } from './users.service';
+import { PagerService } from '../pagerService';
 
 @Component({
   selector: 'app-users-index',
@@ -12,25 +13,47 @@ import { UsersService } from './users.service';
 export class UsersComponent implements OnInit {
   filter : userFilterModel = { userrole: 'all', id: '', username: '' };
   users: UsersModel[];
-  constructor(private heroesService: HeroesService, private router: Router, private usereService: UsersService) { }
+  page = 1;
+  collectionSize = 0;
+  count = 0;
+ 
+  // pager object
+  pager: any = {};
+
+  // paged items
+  pagedItems: any[];
+
+  constructor(private heroesService: HeroesService, private router: Router, private usereService: UsersService, private pagerService: PagerService) {
+   
+  }
 
   ngOnInit() {
-
-    this.heroesService.sessionCheck().subscribe(
-      (responseData: commonResponseModel) => {
-        console.log("response =", responseData);
-        if (!responseData) {
-          this.router.navigate(['./login']);
-        }
-        if (!responseData.success) {
-          this.router.navigate(['./login']);
-        }
-      });
+   
+    if (!localStorage.getItem("accessToken")) {
+      this.router.navigate(['./login']);
+    } else{
+      this.heroesService.sessionCheck().subscribe(
+        (responseData: commonResponseModel) => {
+          console.log("response =", responseData);
+          if (!responseData) {
+            this.router.navigate(['./login']);
+          }
+          if (!responseData.success) {
+            this.router.navigate(['./login']);
+          }
+        });
+    }  
 
     this.usereService.getUsersDetails(this.filter as userFilterModel).subscribe((responseData: userResponseModel) => {
       console.log("response =", responseData);
       if (responseData.success == true) {
         this.users = responseData.users;
+        this.count = 0; 
+        for (let i = 0; i < this.users.length; i++) {
+          this.users[i].index = i + 1;
+        }
+        this.collectionSize = this.users.length;
+        this.setPage(1);
       } else {
         alert(responseData.msg);
       }
@@ -38,7 +61,7 @@ export class UsersComponent implements OnInit {
   }
 
   newUser(): void {
-
+    this.router.navigate(['./users/add']);
   };
 
   model = {
@@ -46,5 +69,13 @@ export class UsersComponent implements OnInit {
     middle: false,
     right: false
   };
+
+  setPage(page: number) {
+    // get pager object from service
+    this.pager = this.pagerService.getPager(this.users.length, page);
+
+    // get current page of items
+    this.pagedItems = this.users.slice(this.pager.startIndex, this.pager.endIndex + 1);
+  }
 
 }

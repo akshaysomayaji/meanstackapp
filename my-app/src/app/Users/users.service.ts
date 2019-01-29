@@ -8,7 +8,7 @@ import { userFilterModel, UsersModel, userResponseModel } from './usersModel';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    "authorization": sessionStorage.getItem("accessToken"),
+    "authorization": localStorage.getItem("accessToken"),
     'Access-Control-Allow-Headers': '*',
     "Expires": "0",
     "Pragma": "no-cache",

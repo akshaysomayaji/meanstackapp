@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { LoginModel } from './LoginModel';
 import { LoginService } from './login.service';
 import { LoginResponseModel } from './LoginResponseModel';
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+
 
 @Component({
   selector: 'app-login',
@@ -11,17 +12,23 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+
   submitted = false;
   notificationShow: boolean = false;
   message: string;
+  
 
   formData: LoginModel = {
     username: "", password: "", remberme: false
   };
+
   constructor(private loginService: LoginService, private router: Router, private formBuilder: FormBuilder) {
     this.createForm();
+    localStorage.clear();
+    
   }
   loginForm: FormGroup;
+
   ngOnInit() {
   }
 
@@ -42,8 +49,8 @@ export class LoginComponent {
         this.message = responseData.response_message;
         this.notificationShow = !responseData.success;
         if (responseData.success) {
-          sessionStorage.setItem("txtFullName", responseData.txtFullName);
-          sessionStorage.setItem("accessToken", responseData.token);
+          localStorage.setItem("txtFullName", responseData.txtFullName);
+          localStorage.setItem("accessToken", responseData.token);
           this.router.navigate(['./users/index']);
         }
       });

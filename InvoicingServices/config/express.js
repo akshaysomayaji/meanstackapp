@@ -48,10 +48,10 @@ module.exports = function () {
     });
 
     app.use(function (req, res, next) {
-        if (req.url !== '/api/login' && req.url !== '/api/user/register') {
-            console.log(req.url);
+        console.log(req.url);
+        if (req.url !== '/api/login' && req.url !== '/api/user/register') {            
             var token = req.headers['authorization'];
-            //console.log('token = ',token);
+            console.log('token = ',token);
             if (token) {
                 try {
                     var decoded = jwt.verify(token, '' + config.tokenSecret);
@@ -60,8 +60,7 @@ module.exports = function () {
                         var currenttime = new Date();
                         var exptime = new Date(decoded.exp);
                         console.log('currenttime =', currenttime.valueOf());
-                        console.log('exp =', exptime.valueOf());
-                     
+                        console.log('exptime =', exptime.valueOf());
                         if (currenttime.valueOf() < exptime.valueOf()) {                            
                             req.session.username = decoded.username;
                             req.session.loggedinuser = decoded.username;

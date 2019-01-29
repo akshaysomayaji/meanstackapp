@@ -9,7 +9,7 @@ import { menuModel } from './menuModel'
 
 export class DefaultLayoutComponent {
 
-  txtFullName: string = sessionStorage.getItem("txtFullName");
+  txtFullName: string = localStorage.getItem("txtFullName");
 
   menulist: menuModel[] = [
     {
