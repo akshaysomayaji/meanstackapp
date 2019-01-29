@@ -17,10 +17,10 @@ export class DefaultLayoutComponent {
         { submenuname: 'Index', link: '/users/index', active: false }, { submenuname: 'Add', link: '/users/add', active: false }]
     },
     { link: "/heroes", menuname: 'Heroes', active: false, submenu: [] },
-    {
-      link: "/heroes", menuname: 'Page 1', active: false,
-      submenu: [{ submenuname: 'Page 1-1', link: '/users/index', active: false }, { submenuname: 'Page 1-2', link: '/heroes', active: false }]
-    }
+    //{
+    //  link: "/heroes", menuname: 'Page 1', active: false,
+    //  submenu: [{ submenuname: 'Page 1-1', link: '/users/index', active: false }, { submenuname: 'Page 1-2', link: '/heroes', active: false }]
+    //}
   ];
 
   title: string = "Test Angular App";
