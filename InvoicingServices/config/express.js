@@ -22,7 +22,7 @@ module.exports = function () {
     }));
     app.use(session({
         secret: "SecretPassPhrase",
-        resave: false,
+        resave: true,
         saveUninitialized: true,
         store: new mongoStore({
             url: config.sessiondb,
@@ -59,31 +59,28 @@ module.exports = function () {
                         req.decoded = decoded;
                         var currenttime = new Date();
                         var exptime = new Date(decoded.exp);
-                        console.log('currenttime =', currenttime.valueOf());
-                        console.log('exptime =', exptime.valueOf());
                         if (currenttime.valueOf() < exptime.valueOf()) {                            
                             req.session.username = decoded.username;
                             req.session.loggedinuser = decoded.username;
                             req.session.userid = decoded.id;
-                            console.log(req.session);
                             next();
                         } else {
                             return res.status(403).send({
                                 success: false,
                                 id: 102,
-                                message: 'Session expired. Please relogin.'
+                                msg: 'Session expired. Please relogin.'
                             });
                         }
                     }
                 }
                 catch (err) {
-                    return res.status(403).send({ success: false, id: 101, message: 'Invalid Token. Please relogin' })
+                    return res.status(403).send({ success: false, id: 101, msg: 'Invalid Token. Please relogin' })
                 }
             } else {
                 return res.status(403).send({
                     success: false,
                     id: 102,
-                    message: 'no token provided.'
+                    msg: 'no token provided.'
                 });
             }
         } else {

@@ -31,18 +31,7 @@ export class UsersComponent implements OnInit {
    
     if (!localStorage.getItem("accessToken")) {
       this.router.navigate(['./login']);
-    } else{
-      this.heroesService.sessionCheck().subscribe(
-        (responseData: commonResponseModel) => {
-          console.log("response =", responseData);
-          if (!responseData) {
-            this.router.navigate(['./login']);
-          }
-          if (!responseData.success) {
-            this.router.navigate(['./login']);
-          }
-        });
-    }  
+    }
 
     this.usereService.getUsersDetails(this.filter as userFilterModel).subscribe((responseData: userResponseModel) => {
       console.log("response =", responseData);
@@ -55,7 +44,7 @@ export class UsersComponent implements OnInit {
         this.collectionSize = this.users.length;
         this.setPage(1);
       } else {
-        alert(responseData.msg);
+        this.router.navigate(['./login']);
       }
     });
   }

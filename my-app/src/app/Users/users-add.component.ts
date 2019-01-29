@@ -48,6 +48,14 @@ export class UsersAddComponent {
   }
 
 
+  onReset(usersModel: UsersModel): void {
+    this.submitted = false;
+    usersModel = {
+      username: "", password: "", userrole: "", email: "", firstname: "", lastname: "", _id: ""
+    };
+    this.formData = usersModel;
+  }
+
   createForm() {
     this.userAddForm = new FormGroup({
       "txtUserName": new FormControl(this.formData.username, [

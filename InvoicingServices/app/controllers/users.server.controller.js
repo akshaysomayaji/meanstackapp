@@ -106,9 +106,9 @@ exports.validateSession = function (req, res, next) {
                 res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User000'), err: err });
             } else {
                 if (result) {
-                    res.send({ success: true, text: "", });
+                    res.send({ success: true, msg: "", });
                 } else {
-                    res.send({ success: false, text: "Session expired. Please relogin." });
+                    res.send({ success: false, msg: "Session expired. Please relogin." });
                 }
             }
         });
@@ -168,26 +168,28 @@ exports.adduser = function (req, res, next) {
                 if (result) {
                     res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User001'), err: err });
                 } else {
-                    mail.sendmails_registration(req.body, req, function (result) {
-                        if (result.mailSentError) {
-                        //    res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User015'), err: err });
-                        //} else {
-                            var userObj = new User(req.body);
-                            userObj.save(function (err, userreponseObj) {
+                    //mail.sendmails_registration(req.body, req, function (result) {
+                    //    if (result.mailSentError) {
+                    //    //    res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User015'), err: err });
+                    //    //} else {
+
+                    //    }
+                    //});
+
+                    var userObj = new User(req.body);
+                    userObj.save(function (err, userreponseObj) {
+                        if (err) {
+                            res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User012'), err: err });
+                        } else {
+                            var md5 = crypto.createHash('md5');
+                            req.body.password = md5.update(req.body.password).digest('hex');
+                            var userPasswordObj = new UserPassword(req.body);
+                            userPasswordObj.userid = userreponseObj._id.toString();
+                            userPasswordObj.save(function (err, userPwdObj) {
                                 if (err) {
-                                    res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User012'), err: err });
-                                } else {
-                                    var md5 = crypto.createHash('md5');
-                                    req.body.password = md5.update(req.body.password).digest('hex');
-                                    var userPasswordObj = new UserPassword(req.body);
-                                    userPasswordObj.userid = userreponseObj._id.toString();
-                                    userPasswordObj.save(function (err, userPwdObj) {
-                                        if (err) {
-                                            res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User000'), err: err });
-                                        }
-                                        res.send({ 'users': [], success: true, msg: notification.getUser_notification_message('User003') });
-                                    });
+                                    res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User000'), err: err });
                                 }
+                                res.send({ 'users': [], success: true, msg: notification.getUser_notification_message('User003') });
                             });
                         }
                     });

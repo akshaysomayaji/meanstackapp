@@ -27,9 +27,9 @@
     <tbody>
       <tr *ngFor="let hero of pagedItems">
         <td>{{hero.index}}</td>
-        <td class="text-capitalize">{{hero.username}}</td>
-        <td class="text-capitalize">{{hero.firstname}}{{hero.lastname}}</td>
-        <td class="text-capitalize">{{hero.email}}</td>
+        <td>{{hero.username}}</td>
+        <td>{{hero.firstname}}&nbsp;{{hero.lastname}}</td>
+        <td >{{hero.email}}</td>
         <td><i class="text-capitalize">{{hero.userrole}}</i> </td>
         <td><a class="btn btn-info btn-sm">Edit</a>&nbsp;<a class="btn btn-danger btn-sm">Delete</a></td>
       </tr>

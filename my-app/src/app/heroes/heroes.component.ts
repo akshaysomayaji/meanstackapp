@@ -13,20 +13,16 @@ export class HeroesComponent implements OnInit {
   constructor(private heroesService: HeroesService, private router: Router) { }
 
   ngOnInit() {
-    if (!localStorage.getItem("accessToken")) {
-      this.router.navigate(['./login']);
-    } else{
-      this.heroesService.sessionCheck().subscribe(
-        (responseData: commonResponseModel) => {
-          console.log("response =", responseData);
-          if (!responseData) {
-            this.router.navigate(['./login']);
-          }
-          if (!responseData.success) {
-            this.router.navigate(['./login']);
-          }
-        });
-    }    
+    this.heroesService.sessionCheck().subscribe(
+      (responseData: commonResponseModel) => {
+        console.log("response =", responseData);
+        if (!responseData) {
+          this.router.navigate(['./login']);
+        }
+        if (!responseData.success) {
+          this.router.navigate(['./login']);
+        }
+      });   
   }
 
 

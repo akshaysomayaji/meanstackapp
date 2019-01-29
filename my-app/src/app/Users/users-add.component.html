@@ -24,7 +24,7 @@
         </span>
       </div>
       <div class="form-group col-md-6">
-        <input type="text" name="txtLastname" formControlName="txtLastname" class="form-control" placeholder="Your Last Name *" value="" [(ngModel)]="formData.lastname" />
+        <input type="text" name="txtLastname" formControlName="txtLastname" class="form-control" placeholder="Your Last Name" value="" [(ngModel)]="formData.lastname" />
         <span *ngIf="submitted == true && userAddForm.controls['txtLastname'].invalid" class="bg-danger jasmine-result-message uk-pull-3-10">
           Last name is invalid.
         </span>
@@ -44,8 +44,12 @@
         </span>
       </div>
     </div>
-    <div class="form-group">
-      <input type="submit" class="btn btn-primary btn-success btnSubmit" value="Add" (click)="onCreate(formData)" />
+    <div class="row">
+      <div class="form-group col-md-6">
+        <input type="submit" class="btn btn-primary btn-success btnSubmit" value="Add" (click)="onCreate(formData)" />
+        &nbsp; &nbsp; &nbsp;
+        <input type="button" class="row btn btn-primary btn-info btnSubmit" value="Reset" (click)="onReset(formData)" />
+      </div>
     </div>
   </form>
 </div>
