@@ -1,3 +1,5 @@
+import { HttpParams } from "@angular/common/http";
+
 export class UsersModel {
   firstname: string;
   lastname: string;

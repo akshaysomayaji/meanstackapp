@@ -22,13 +22,13 @@ module.exports = function () {
     }));
     app.use(session({
         secret: "SecretPassPhrase",
-        resave: true,
-        saveUninitialized: true,
+        resave: false,
+        saveUninitialized: false,
         store: new mongoStore({
             url: config.sessiondb,
             ttl: config.sessiontimeout
         }),
-        cookie: {secure: true }
+        cookie: {maxAge: 60 * 60 * 1000 }
     }));
     app.use(bodyParser.json({ limit: '50mb' }));
     app.use(boolParser());
@@ -55,13 +55,14 @@ module.exports = function () {
                 try {
                     var decoded = jwt.verify(token, '' + config.tokenSecret);
                     if (decoded) {
-                        req.decoded = decoded;
+                        console.log(decoded);
                         var currenttime = new Date();
                         var exptime = new Date(decoded.exp);
+                        console.log(req.session);
                         if (currenttime.valueOf() < exptime.valueOf()) {                            
-                            req.session.username = decoded.username;
-                            req.session.loggedinuser = decoded.username;
-                            req.session.userid = decoded.id;
+                            //req.session.username = decoded.username;
+                            //req.session.loggedinuser = decoded.username;
+                            //req.session.userid = decoded.id;
                             next();
                         } else {
                             return res.status(403).send({

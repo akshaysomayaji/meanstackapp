@@ -12,6 +12,7 @@ import { PagerService } from '../pagerService';
 })
 export class UsersComponent implements OnInit {
   filter: userFilterModel = { userrole: '', _id: '', username: '' };
+  
   users: UsersModel[];
   page = 1;
   collectionSize = 0;

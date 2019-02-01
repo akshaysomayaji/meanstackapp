@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -24,14 +24,16 @@ const httpOptions = {
 export class UsersService {
   private heroesUrl = environment.API_ENDPOINT;
   usermodel: UsersModel;
-
+  params: HttpParams
+    
   constructor(
     private http: HttpClient, private usersService: UsersService)
   { }
 
 
   getUsersDetails(filter: userFilterModel): Observable<userResponseModel> {
-    return this.http.get<userResponseModel>(this.heroesUrl + "/user/getall/", { headers: httpOptions.headers, params: filter }).pipe(
+    this.getHttpParams(filter).subscribe(response => this.params = response);
+    return this.http.get<userResponseModel>(this.heroesUrl + "/user/getall/", { headers: httpOptions.headers, params: this.params }).pipe(
       tap((response: userResponseModel) => this.log(`logged in w/ id=${response}`)),
       catchError(this.handleError<userResponseModel>('authenticate'))
     );
@@ -65,6 +67,14 @@ export class UsersService {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
+
+  getHttpParams(filter: userFilterModel): Observable<HttpParams>{
+    let httpParams = new HttpParams();
+    Object.keys(filter).forEach(function (key, value) {
+      httpParams = httpParams.set(key, filter[key]);
+    });
+    return of(httpParams);
   }
 
   setFormData(formData: UsersModel): void {

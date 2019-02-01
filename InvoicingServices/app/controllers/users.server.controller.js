@@ -33,8 +33,10 @@ exports.authenticate = function (req, res, next) {
                                     var calculatedExpiresIn = (((d.getTime()) + (60 * 60 * 1000)) - (d.getTime() - d.getMilliseconds()) / 1000);
                                     req.session.username = result.username;
                                     req.session.loggedinuser = result.email;
+                                    tokenObj.sessionId = req.sessionId;
+                                    console.log(req.session);
                                     console.log("expiry time =", new Date(calculatedExpiresIn));
-                                    var token = jwt.sign(tokenObj, '' + config.tokenSecret, { expiresIn: calculatedExpiresIn });
+                                    var token = jwt.sign(tokenObj, '' + config.tokenSecret, { expiresIn: calculatedExpiresIn});
                                     res.send({ 'users': result._id, txtFullName: result.firstname, txtUsername: result.username, success: true, response_message: '', token: token, txtRoleName: result.txtRoleName });                                                                      
                                 });
 
@@ -142,6 +144,7 @@ exports.getuserdetails = function (req, res, next) {
 }
 
 exports.getallusers = function (req, res, next) {
+    console.log("user req = ", req);
     var params = req.query;
     var query = { isActive: true};
     Object.keys(params).forEach(function (key, value) {
