@@ -6,6 +6,7 @@ import {
 
 import { UsersComponent } from './users.component';
 import { UsersAddComponent } from './users-add.component';
+import { UsersEditComponent } from './users-edit.component';
 
 
 const routes: Routes = [
@@ -27,6 +28,13 @@ const routes: Routes = [
         component: UsersAddComponent,
         data: {
           title: 'Add'
+        }
+      },
+      {
+        path: 'edit',
+        component: UsersEditComponent,
+        data: {
+          title: 'Edit'
         }
       },]
   }];

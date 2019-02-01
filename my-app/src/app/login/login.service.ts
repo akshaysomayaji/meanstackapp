@@ -22,7 +22,7 @@ export class LoginService {
   { }
 
 
-  addHero(login: LoginModel): Observable<LoginModel> {
+  login(login: LoginModel): Observable<LoginModel> {
     return this.http.post<LoginModel>(this.heroesUrl + "/login", login, httpOptions).pipe(
       tap((loginresponse: LoginResponseModel) => this.log(`logged in w/ id=${loginresponse.txtUsername}`)),
       catchError(this.handleError<LoginModel>('login'))

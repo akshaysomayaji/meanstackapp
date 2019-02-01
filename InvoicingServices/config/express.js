@@ -51,7 +51,6 @@ module.exports = function () {
         console.log(req.url);
         if (req.url !== '/api/login' && req.url !== '/api/user/register') {            
             var token = req.headers['authorization'];
-            console.log('token = ',token);
             if (token) {
                 try {
                     var decoded = jwt.verify(token, '' + config.tokenSecret);

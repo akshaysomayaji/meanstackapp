@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoginModel } from './LoginModel';
 import { LoginService } from './login.service';
 import { LoginResponseModel } from './LoginResponseModel';
@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
   templateUrl: 'login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   submitted = false;
   notificationShow: boolean = false;
@@ -24,12 +24,12 @@ export class LoginComponent {
 
   constructor(private loginService: LoginService, private router: Router, private formBuilder: FormBuilder) {
     this.createForm();
-    localStorage.clear();
-    
+    localStorage.clear();    
   }
   loginForm: FormGroup;
 
   ngOnInit() {
+    
   }
 
   onLogin(loginModel: LoginModel): void {
@@ -43,7 +43,7 @@ export class LoginComponent {
 
     this.formData = loginModel;
 
-    this.loginService.addHero(this.formData as LoginModel)
+    this.loginService.login(this.formData as LoginModel)
       .subscribe((responseData: LoginResponseModel) => {
         console.log(responseData);
         this.message = responseData.response_message;

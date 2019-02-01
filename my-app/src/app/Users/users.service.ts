@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { userFilterModel, UsersModel, userResponseModel } from './usersModel';
+import { query } from '@angular/core/src/render3/query';
 
 
 const httpOptions = {
@@ -22,7 +23,7 @@ const httpOptions = {
 
 export class UsersService {
   private heroesUrl = environment.API_ENDPOINT;
-
+  usermodel: UsersModel;
 
   constructor(
     private http: HttpClient, private usersService: UsersService)
@@ -30,7 +31,7 @@ export class UsersService {
 
 
   getUsersDetails(filter: userFilterModel): Observable<userResponseModel> {
-    return this.http.get<userResponseModel>(this.heroesUrl + "/user/getall/" + filter.userrole, httpOptions).pipe(
+    return this.http.get<userResponseModel>(this.heroesUrl + "/user/getall/", { headers: httpOptions.headers, params: filter }).pipe(
       tap((response: userResponseModel) => this.log(`logged in w/ id=${response}`)),
       catchError(this.handleError<userResponseModel>('authenticate'))
     );
@@ -42,6 +43,15 @@ export class UsersService {
       catchError(this.handleError<userResponseModel>('Register'))
     );
   }
+
+
+  updateUserDetails(register: UsersModel): Observable<userResponseModel> {
+    return this.http.put<userResponseModel>(this.heroesUrl + "/user/edit", register, httpOptions).pipe(
+      tap((response: userResponseModel) => this.log(`logged in w/ id=${response}`)),
+      catchError(this.handleError<userResponseModel>('Register'))
+    );
+  }
+
 
   private log(message: string) {
     console.log(message);
@@ -55,6 +65,15 @@ export class UsersService {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
+
+  setFormData(formData: UsersModel): void {
+    console.log(formData);
+    this.usermodel = formData;
+  }
+
+  getFormData(): Observable<UsersModel> {
+    return of(this.usermodel);
   }
 
 }

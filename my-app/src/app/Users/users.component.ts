@@ -11,11 +11,13 @@ import { PagerService } from '../pagerService';
   templateUrl: './users.component.html'
 })
 export class UsersComponent implements OnInit {
-  filter : userFilterModel = { userrole: 'all', id: '', username: '' };
+  filter: userFilterModel = { userrole: '', _id: '', username: '' };
   users: UsersModel[];
   page = 1;
   collectionSize = 0;
   count = 0;
+
+  userrole: any = [{ name: "Admin", value: "Admin" }, { name: "Staff", value: "Staff" }];
  
   // pager object
   pager: any = {};
@@ -32,21 +34,8 @@ export class UsersComponent implements OnInit {
     if (!localStorage.getItem("accessToken")) {
       this.router.navigate(['./login']);
     }
+    this.getUserDetails();
 
-    this.usereService.getUsersDetails(this.filter as userFilterModel).subscribe((responseData: userResponseModel) => {
-      console.log("response =", responseData);
-      if (responseData.success == true) {
-        this.users = responseData.users;
-        this.count = 0; 
-        for (let i = 0; i < this.users.length; i++) {
-          this.users[i].index = i + 1;
-        }
-        this.collectionSize = this.users.length;
-        this.setPage(1);
-      } else {
-        this.router.navigate(['./login']);
-      }
-    });
   }
 
   newUser(): void {
@@ -65,6 +54,32 @@ export class UsersComponent implements OnInit {
 
     // get current page of items
     this.pagedItems = this.users.slice(this.pager.startIndex, this.pager.endIndex + 1);
+  }
+
+  editUser(usersModel: UsersModel): void {
+    this.usereService.setFormData(usersModel);
+    this.router.navigate(['./users/edit']);
+  }
+
+  onChange() {
+    this.getUserDetails();
+  }
+
+  getUserDetails() {
+    this.usereService.getUsersDetails(this.filter as userFilterModel).subscribe((responseData: userResponseModel) => {
+      console.log("response =", responseData);
+      if (responseData.success == true) {
+        this.users = responseData.users;
+        this.count = 0;
+        for (let i = 0; i < this.users.length; i++) {
+          this.users[i].index = i + 1;
+        }
+        this.collectionSize = this.users.length;
+        this.setPage(1);
+      } else {
+        this.router.navigate(['./login']);
+      }
+    });
   }
 
 }

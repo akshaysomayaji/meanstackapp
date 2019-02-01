@@ -31,7 +31,7 @@ export class HeroesService {
     return this.http.get<commonResponseModel>(this.heroesUrl + "/user/sessionvalidation/" + sessionStorage.getItem("accessToken"), httpOptions).pipe(
       tap((loginresponse: commonResponseModel) => this.log(`logged in w/ id=${loginresponse}`)),
       catchError(this.handleError<commonResponseModel>('session'))
-    )s;
+    );
   }
 
   private log(message: string) {

@@ -6,6 +6,7 @@ export class UsersModel {
   userrole: string;
   _id: string;
   password: string;
+  index: number;
 }
 
 
@@ -16,7 +17,7 @@ export class userResponseModel {
 }
 
 export class userFilterModel {
-  id: string;
+  _id: string;
   userrole: string;
   username: string;
 }

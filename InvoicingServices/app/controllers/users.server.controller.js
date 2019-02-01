@@ -17,11 +17,14 @@ exports.authenticate = function (req, res, next) {
                 if (userpwd) {
                     if (userpwd.comparepasswords(password)) {
                         userLoginLogSchema.update({ txtUserId: result._id},
-                            { isOnline: false, isActive: false, dtLoggedOut: Date.now() },function () {
+                            { isOnline: false, isActive: false, dtLoggedOut: Date.now() },
+                            { multi: true }, function (err, res2) {
+                                console.log("res =", res2);
                                 var userLoginLogSchemaObj = new userLoginLogSchema();
                                 userLoginLogSchemaObj.txtUserId = result._id;
                                 userLoginLogSchemaObj.isOnline = true;
-                                userLoginLogSchemaObj.save(function () {
+                                userLoginLogSchemaObj.save(function (err1, res1) {
+                                    console.log("res1 =", res1);
                                     result.password = null;
                                     var tokenObj = {};
                                     tokenObj.id = result._id;
@@ -139,11 +142,12 @@ exports.getuserdetails = function (req, res, next) {
 }
 
 exports.getallusers = function (req, res, next) {
-    var rolename = req.params.userrole;
-    var query = { userrole: rolename, isActive: true };
-    if (rolename === 'all') {
-        query = { isActive: true };
-    }
+    var params = req.query;
+    var query = { isActive: true};
+    Object.keys(params).forEach(function (key, value) {
+        if (params[key])
+            query[key] = new RegExp(params[key], "i");
+    });
     try {
         User.find(query, function (err, result) {
             if (result) {
@@ -189,7 +193,7 @@ exports.adduser = function (req, res, next) {
                                 if (err) {
                                     res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User000'), err: err });
                                 }
-                                res.send({ 'users': [], success: true, msg: notification.getUser_notification_message('User003') });
+                                res.send({ 'users': [], success: true, msg: notification.getUser_notification_message('User004') });
                             });
                         }
                     });
@@ -216,6 +220,23 @@ exports.getOnlineUsers = function (req, res, next) {
         ], function (err, response) {
         });
     } catch (err) {
+        res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User000'), err: err });
+    }
+}
+
+exports.update = function (req, res, next) {
+    try {
+        User.update({ _id : req.body._id }, req.body, function (err, response) {
+            if (err) {
+                res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User000'), err: err });
+            } else {
+                console.log(response);
+                res.send({ 'users': [], success: true, msg: notification.getUser_notification_message('User004') });
+            }
+            
+        });
+    }
+    catch (err) {
         res.send({ 'users': [], success: false, msg: notification.getUser_notification_message('User000'), err: err });
     }
 }

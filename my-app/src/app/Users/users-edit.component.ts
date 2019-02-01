@@ -3,13 +3,12 @@ import { UsersModel, userResponseModel } from './usersModel';
 import { UsersService } from './users.service';
 import { Router } from '@angular/router'
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-users-add',
-  templateUrl: 'users-add.component.html'
+  selector: 'app-users-edit',
+  templateUrl: 'users-edit.component.html'
 })
-export class UsersAddComponent {
+export class UsersEditComponent {
   submitted = false;
   notificationShow: boolean = false;
   message: string;
@@ -17,34 +16,37 @@ export class UsersAddComponent {
   formData: UsersModel = {
     username: "", password: "", userrole: "", email: "", firstname: "", lastname: "", _id: "", index:0
   };
+
+
+
   constructor(private userService: UsersService, private router: Router, private formBuilder: FormBuilder) {
     this.createForm();
+    this.userService.getFormData().subscribe(response => this.formData = response);
+    console.log(this.formData);
   }
 
-  userAddForm: FormGroup;
+
+
+  userEditForm: FormGroup;
   ngOnInit() {
   }
 
   onCreate(usersModel: UsersModel): void {
-    console.log(usersModel);
+    console.log(this.formData);
     this.submitted = true;
-
+    console.log(usersModel);
     // stop here if form is invalid
-    if (this.userAddForm.invalid) {
+    if (this.userEditForm.invalid) {
       return;
     }
     this.formData = usersModel;
 
-    delete this.formData._id;
-
-    this.userService.addUserDetails(this.formData as UsersModel)
+    this.userService.updateUserDetails(this.formData as UsersModel)
       .subscribe((responseData: userResponseModel) => {
         console.log(responseData);
         this.message = responseData.msg;
         this.notificationShow = true;
       });
-
-
   }
 
 
@@ -57,7 +59,7 @@ export class UsersAddComponent {
   }
 
   createForm() {
-    this.userAddForm = new FormGroup({
+    this.userEditForm = new FormGroup({
       "txtUserName": new FormControl(this.formData.username, [
         Validators.required
       ]),
@@ -68,9 +70,6 @@ export class UsersAddComponent {
         Validators.required
       ]),
       "txtLastname": new FormControl(this.formData.lastname),
-      "txtPassword": new FormControl(this.formData.password, [
-        Validators.required, Validators.minLength(6)
-      ]),
       "txtUserRole": new FormControl(this.formData.userrole, [
         Validators.required,
       ]),

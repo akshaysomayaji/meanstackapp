@@ -7,6 +7,7 @@ import { UsersComponent } from './users.component';
 
 import { UsersRoutingModule } from './users-routing.module';
 import { UsersAddComponent } from './users-add.component';
+import { UsersEditComponent } from './users-edit.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { UsersAddComponent } from './users-add.component';
     UsersRoutingModule,
     NgbModule
   ],
-  declarations: [UsersComponent, UsersAddComponent]
+  declarations: [UsersComponent, UsersAddComponent, UsersEditComponent]
 })
 export class UsersModule { }

@@ -1,40 +1,62 @@
 <div class="container-12">
   <div><button class="btn btn-info" (click)="newUser()"> New User </button></div>
   <hr />
-  <table class="table table-bordered table-striped">
-    <thead>
-      <tr>
-        <th>
-          Sl.Num
-        </th>
-        <th>
-          User Name
-        </th>
-        <th>
-          Full Name
-        </th>
-        <th>
-          Email
-        </th>
-        <th>
-          Role
-        </th>
-        <th>
-          Edit
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let hero of pagedItems">
-        <td>{{hero.index}}</td>
-        <td>{{hero.username}}</td>
-        <td>{{hero.firstname}}&nbsp;{{hero.lastname}}</td>
-        <td >{{hero.email}}</td>
-        <td><i class="text-capitalize">{{hero.userrole}}</i> </td>
-        <td><a class="btn btn-info btn-sm">Edit</a>&nbsp;<a class="btn btn-danger btn-sm">Delete</a></td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="form-inline">
+    <div class="form-group">
+      <label for="inputsm">Select Role</label>
+      <select id="inputsm" class="form-control" [(ngModel)]="filter.userrole" (change)="onChange()">
+        Select User Role
+        <option value="">Select All</option>
+        <option value="admin">Admin</option>
+        <option value="staff">Staff</option>
+      </select>
+    </div>
+    &nbsp;
+    <div class="form-group">
+      <label for="inputdefault ">User name : </label>
+      <input class="form-control" id="inputdefault" type="text" [(ngModel)]="filter.username" (change)="onChange()" >
+    </div>
+  </div>
+  <hr />
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped ">
+      <thead>
+        <tr>
+          <th>
+            Sl.Num
+          </th>
+          <th>
+            User Name
+          </th>
+          <th>
+            Full Name
+          </th>
+          <th>
+            Email
+          </th>
+          <th>
+            Role
+          </th>
+          <th>
+            Edit
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let hero of pagedItems">
+          <td>{{hero.index}}</td>
+          <td>{{hero.username}}</td>
+          <td>{{hero.firstname}}&nbsp;{{hero.lastname}}</td>
+          <td>{{hero.email}}</td>
+          <td><i>{{hero.userrole}}</i> </td>
+          <td><a class="btn btn-info btn-sm" (click)="editUser(hero)">Edit</a>&nbsp;<a class="btn btn-danger btn-sm">Delete</a></td>
+        </tr>
+        <tr *ngIf="pagedItems.length == 0">
+          <td colspan="6" style="text-align:center"> No Data Found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <!-- pager -->
   <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
