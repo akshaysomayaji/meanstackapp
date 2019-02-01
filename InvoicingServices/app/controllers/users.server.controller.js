@@ -144,7 +144,6 @@ exports.getuserdetails = function (req, res, next) {
 }
 
 exports.getallusers = function (req, res, next) {
-    console.log("user req = ", req);
     var params = req.query;
     var query = { isActive: true};
     Object.keys(params).forEach(function (key, value) {
