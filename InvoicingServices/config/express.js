@@ -47,46 +47,45 @@ module.exports = function () {
         return next();
     });
 
-    app.use(function (req, res, next) {
-        console.log(req.url);
-        if (req.url !== '/api/login' && req.url !== '/api/user/register') {            
-            var token = req.headers['authorization'];
-            if (token) {
-                try {
-                    var decoded = jwt.verify(token, '' + config.tokenSecret);
-                    if (decoded) {
-                        console.log(decoded);
-                        var currenttime = new Date();
-                        var exptime = new Date(decoded.exp);
-                        console.log(req.session);
-                        if (currenttime.valueOf() < exptime.valueOf()) {                            
-                            //req.session.username = decoded.username;
-                            //req.session.loggedinuser = decoded.username;
-                            //req.session.userid = decoded.id;
-                            next();
-                        } else {
-                            return res.status(403).send({
-                                success: false,
-                                id: 102,
-                                msg: 'Session expired. Please relogin.'
-                            });
-                        }
-                    }
-                }
-                catch (err) {
-                    return res.status(403).send({ success: false, id: 101, msg: 'Invalid Token. Please relogin' })
-                }
-            } else {
-                return res.status(403).send({
-                    success: false,
-                    id: 102,
-                    msg: 'no token provided.'
-                });
-            }
-        } else {
-            next();
-        }
-    });
+    //app.use(function (req, res, next) {
+    //    console.log(req.url);
+    //    if (req.url != '/api/login' || req.url != '/api/user/register'
+    //        || req.url != '/api/index' || req.url.toString() != '/'
+    //    ) {
+    //        var token = req.headers['authorization'];
+    //        if (token) {
+    //            try {
+    //                var decoded = jwt.verify(token, '' + config.tokenSecret);
+    //                if (decoded) {
+    //                    console.log(decoded);
+    //                    var currenttime = new Date();
+    //                    var exptime = new Date(decoded.exp);
+    //                    console.log(req.session);
+    //                    if (currenttime.valueOf() < exptime.valueOf()) {                            
+    //                        next();
+    //                    } else {
+    //                        return res.status(403).send({
+    //                            success: false,
+    //                            id: 102,
+    //                            msg: 'Session expired. Please relogin.'
+    //                        });
+    //                    }
+    //                }
+    //            }
+    //            catch (err) {
+    //                return res.status(403).send({ success: false, id: 101, msg: 'Invalid Token. Please relogin' })
+    //            }
+    //        } else {
+    //            return res.status(403).send({
+    //                success: false,
+    //                id: 102,
+    //                msg: 'no token provided.'
+    //            });
+    //        }
+    //    } else {
+    //        next();
+    //    }
+    //});
     require('../app/routes/users.server.routes.js')(app);
     require('../app/routes/index.server.routes.js')(app);
     require('../app/routes/config.server.routes.js')(app);
